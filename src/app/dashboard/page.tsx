@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MOCK_FARM_STATS, MOCK_ALERTS } from "@/data/mock";
 import { Activity, AlertTriangle, BatteryWarning, WifiOff, CheckCircle2, TrendingUp, TrendingDown, ThermometerSun, Map } from "lucide-react";
@@ -13,6 +14,27 @@ const MapPreview = dynamic(() => import("@/components/Map"), {
 });
 
 export default function Dashboard() {
+  const [stats, setStats] = useState(MOCK_FARM_STATS);
+  const [alerts, setAlerts] = useState(MOCK_ALERTS);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const statsRes = await fetch("http://localhost:8000/api/v1/dashboard/stats");
+        if (statsRes.ok) setStats(await statsRes.json());
+        
+        const alertsRes = await fetch("http://localhost:8000/api/v1/dashboard/alerts");
+        if (alertsRes.ok) setAlerts(await alertsRes.json());
+      } catch (err) {
+        // Silently fallback to mock data on error
+      }
+    };
+    
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="p-4 md:p-8 space-y-8 max-w-[1800px] mx-auto min-h-screen">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-card p-6 rounded-2xl shadow-sm border border-border/50">
@@ -28,11 +50,11 @@ export default function Dashboard() {
 
       {/* Premium KPI Cards (AgTech Earthy Tones) */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-        <KPICard title="Jami Chorva" value={MOCK_FARM_STATS.totalAnimals.toString()} label="Barcha ro'yxatdagilar" icon={<CheckCircle2 className="w-5 h-5 text-slate-400" />} />
-        <KPICard title="Online (Telemetriya)" value={MOCK_FARM_STATS.onlineCount.toString()} label="Faol aloqada" valueClass="text-brand-600 dark:text-brand-400" bgClass="bg-brand-50/50 dark:bg-brand-900/10" icon={<Activity className="w-5 h-5 text-brand-500" />} trend="+12" />
-        <KPICard title="Offline (Ulanish yo'q)" value={MOCK_FARM_STATS.offlineCount.toString()} label="Aloqa uzilgan" valueClass="text-slate-600 dark:text-slate-400" icon={<WifiOff className="w-5 h-5 text-slate-400" />} />
-        <KPICard title="Xavf va Alertlar" value={MOCK_FARM_STATS.activeAlerts.toString()} label="Zudlik bilan choralar" valueClass="text-red-600 dark:text-red-400" bgClass="bg-red-50/50 dark:bg-red-900/10 border-red-100 dark:border-red-900/50" icon={<AlertTriangle className="w-5 h-5 text-red-500" />} trend="+2" />
-        <KPICard title="Batareya past" value={MOCK_FARM_STATS.lowBatteryCount.toString()} label="< 20% quvvat qoldi" valueClass="text-amber-600 dark:text-amber-500" icon={<BatteryWarning className="w-5 h-5 text-amber-500" />} />
+        <KPICard title="Jami Chorva" value={stats.totalAnimals.toString()} label="Barcha ro'yxatdagilar" icon={<CheckCircle2 className="w-5 h-5 text-slate-400" />} />
+        <KPICard title="Online (Telemetriya)" value={stats.onlineCount.toString()} label="Faol aloqada" valueClass="text-brand-600 dark:text-brand-400" bgClass="bg-brand-50/50 dark:bg-brand-900/10" icon={<Activity className="w-5 h-5 text-brand-500" />} trend="+12" />
+        <KPICard title="Offline (Ulanish yo'q)" value={stats.offlineCount.toString()} label="Aloqa uzilgan" valueClass="text-slate-600 dark:text-slate-400" icon={<WifiOff className="w-5 h-5 text-slate-400" />} />
+        <KPICard title="Xavf va Alertlar" value={stats.activeAlerts.toString()} label="Zudlik bilan choralar" valueClass="text-red-600 dark:text-red-400" bgClass="bg-red-50/50 dark:bg-red-900/10 border-red-100 dark:border-red-900/50" icon={<AlertTriangle className="w-5 h-5 text-red-500" />} trend="+2" />
+        <KPICard title="Batareya past" value={stats.lowBatteryCount.toString()} label="< 20% quvvat qoldi" valueClass="text-amber-600 dark:text-amber-500" icon={<BatteryWarning className="w-5 h-5 text-amber-500" />} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 h-full">
@@ -93,12 +115,12 @@ export default function Dashboard() {
             <CardHeader className="pb-4 border-b px-6 py-5">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg">Tezkor Xabarnomalar</CardTitle>
-                <Badge variant="destructive" className="rounded-xl px-3">{MOCK_FARM_STATS.activeAlerts} ta faol</Badge>
+                <Badge variant="destructive" className="rounded-xl px-3">{stats.activeAlerts} ta faol</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0 flex-1 overflow-y-auto min-h-[300px]">
               <div className="divide-y divide-border/50">
-                {MOCK_ALERTS.map(alert => (
+                {alerts.map(alert => (
                   <div key={alert.id} className={`p-5 flex gap-4 transition-colors hover:bg-muted/30 ${alert.isResolved ? 'opacity-50 grayscale' : ''}`}>
                     <div className="mt-1 shrink-0 bg-background rounded-full p-2 border border-border/50 shadow-sm">
                       {alert.type === 'Geofence Breach' && <AlertTriangle className="w-5 h-5 text-red-500" />}

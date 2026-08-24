@@ -25,6 +25,7 @@ const iconOffline = createIcon('#94a3b8');
 
 export default function Map() {
   const [mounted, setMounted] = useState(false);
+  const [locations, setLocations] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
@@ -35,20 +36,33 @@ export default function Map() {
       iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
       shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
     });
+
+    const fetchLocations = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/api/v1/map/locations");
+        if (res.ok) setLocations(await res.json());
+      } catch (err) {
+        // Fallback or ignore
+      }
+    };
+    
+    fetchLocations();
+    const interval = setInterval(fetchLocations, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   if (!mounted) {
     return <div className="w-full h-full bg-muted animate-pulse rounded-xl flex items-center justify-center text-muted-foreground">Xarita yuklanmoqda...</div>;
   }
 
-  // Base coordinates around a typical farm in Uzbekistan
-  const center: [number, number] = [40.1158, 67.8422];
+  // Base coordinates around a typical farm in Samarkand (where backend simulates)
+  const center: [number, number] = [39.654, 66.958];
 
   return (
     <div className="w-full h-full relative rounded-xl overflow-hidden shadow-sm border border-border">
       <MapContainer 
         center={center} 
-        zoom={13} 
+        zoom={15} 
         scrollWheelZoom={true} 
         className="w-full h-full"
         zoomControl={false}
@@ -61,54 +75,26 @@ export default function Map() {
         {/* Geofence Visualization */}
         <Circle 
           center={center} 
-          radius={3000} 
+          radius={500} 
           pathOptions={{ color: '#22c55e', fillColor: '#22c55e', fillOpacity: 0.1, dashArray: '5, 10' }} 
         />
 
-        {MOCK_ANIMALS.map(animal => {
-          let icon = iconNormal;
-          if (!animal.isOnline) icon = iconOffline;
-          else if (animal.healthStatus === 'Critical' || animal.batteryLevel < 20) icon = iconCritical;
-          else if (animal.healthStatus === 'Warning') icon = iconWarning;
-
-          const historyPath = animal.history.map(loc => [loc.lat, loc.lng] as [number, number]);
+        {locations.map(animal => {
+          let icon = animal.status === 'warning' ? iconWarning : iconNormal;
 
           return (
             <div key={animal.id}>
-              {/* Show history trail for active animals */}
-              {animal.isOnline && historyPath.length > 0 && (
-                <Polyline 
-                  positions={historyPath} 
-                  pathOptions={{ color: '#3b82f6', weight: 2, opacity: 0.5, dashArray: '4' }} 
-                />
-              )}
-              
               <Marker 
-                position={[animal.currentLocation.lat, animal.currentLocation.lng]} 
+                position={[animal.lat, animal.lng]} 
                 icon={icon}
               >
                 <Popup className="custom-popup">
                   <div className="p-1 min-w-[200px]">
                     <div className="flex items-center justify-between mb-3 pb-2 border-b border-border">
-                      <h3 className="font-bold text-base">{animal.type} #{animal.id}</h3>
-                      <Badge variant={animal.isOnline ? "success" : "secondary"}>
-                        {animal.isOnline ? 'Online' : 'Offline'}
+                      <h3 className="font-bold text-base">ID: {animal.id.substring(0,8)}</h3>
+                      <Badge variant={animal.status === 'warning' ? "destructive" : "success"}>
+                        {animal.status === 'warning' ? 'Xavf' : 'Online'}
                       </Badge>
-                    </div>
-                    
-                    <div className="space-y-2 mb-4 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Battery className={`w-4 h-4 ${animal.batteryLevel < 20 ? 'text-red-500' : 'text-green-500'}`} />
-                        <span>{animal.batteryLevel}% Batareya</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Thermometer className="w-4 h-4 text-orange-500" />
-                        <span>{animal.temperature.toFixed(1)}°C Harorat</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-blue-500" />
-                        <span>{animal.activityLevel}</span>
-                      </div>
                     </div>
 
                     <Button className="w-full text-xs touch-target bg-brand-600 hover:bg-brand-700 text-white mt-2" variant="default">
