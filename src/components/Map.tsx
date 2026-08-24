@@ -8,17 +8,17 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Activity, Battery, Thermometer } from 'lucide-react';
 
-// Custom icons based on animal state
+// Custom literal icons based on AgTech Master Prompt (Cow Emoji instead of abstract dots)
 const createIcon = (color: string) => {
   return new L.DivIcon({
     className: 'custom-leaflet-icon',
-    html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7]
+    html: `<div style="background-color: ${color}; width: 28px; height: 28px; border-radius: 8px; border: 2px solid #F4F4F4; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">🐄</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
   });
 };
 
-const iconNormal = createIcon('#22c55e');
+const iconNormal = createIcon('#259150'); // Forest Green
 const iconWarning = createIcon('#eab308');
 const iconCritical = createIcon('#ef4444');
 const iconOffline = createIcon('#94a3b8');
@@ -111,7 +111,7 @@ export default function Map() {
                       </div>
                     </div>
 
-                    <Button className="w-full text-xs h-8" variant="outline">
+                    <Button className="w-full text-xs touch-target bg-brand-600 hover:bg-brand-700 text-white mt-2" variant="default">
                       To'liq ma'lumot
                     </Button>
                   </div>

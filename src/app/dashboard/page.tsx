@@ -85,27 +85,31 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          {/* Activity Chart */}
-          <Card className="shadow-sm">
-            <CardHeader className="pb-3 border-b">
-              <CardTitle>Poda faolligi</CardTitle>
+          {/* Agentic AI Prompt (Telescoping Interface) */}
+          <Card className="shadow-sm border-brand-500 bg-brand-50 dark:bg-brand-900/20">
+            <CardHeader className="pb-2 border-b border-brand-200 dark:border-brand-800">
+              <CardTitle className="text-brand-800 dark:text-brand-300 flex items-center gap-2">
+                <Activity className="w-5 h-5" />
+                AI AgTech Maslahatchi
+              </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-6">
-              <div className="h-[200px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={activityData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                    <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
-                    <Tooltip 
-                      contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                      itemStyle={{ fontSize: '13px' }}
-                      labelStyle={{ fontSize: '13px', fontWeight: 'bold', color: '#0f172a', marginBottom: '4px' }}
-                    />
-                    <Line type="monotone" name="Faol (%)" dataKey="active" stroke="#22c55e" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
-                    <Line type="monotone" name="Dam olayotgan (%)" dataKey="resting" stroke="#94a3b8" strokeWidth={2} dot={false} activeDot={{ r: 4 }} />
-                  </LineChart>
-                </ResponsiveContainer>
+            <CardContent className="p-4 pt-4 space-y-4">
+              <div className="bg-card p-4 rounded-lg border border-border">
+                <h4 className="font-semibold text-sm mb-2 text-red-600 dark:text-red-400">🚨 Anomaliya aniqlandi!</h4>
+                <p className="text-sm text-foreground mb-3">
+                  <strong>B-12 sektori</strong> yaylov biomassasi kritik darajadan tushib ketdi (NDVI &lt; 0.145). 
+                  Qoramollarni zudlik bilan sog'lom oziqa maydoniga (<strong>B-13 sektori</strong>) ko'chirish tavsiya etiladi.
+                </p>
+                
+                {/* Slide-to-Confirm Mockup */}
+                <div className="slide-confirm flex items-center w-full touch-target shadow-inner">
+                  <div className="h-full bg-brand-500 flex items-center justify-center rounded-full px-4 min-w-[60px] cursor-pointer hover:bg-brand-600 transition-colors z-10 text-white font-bold">
+                    →
+                  </div>
+                  <span className="absolute w-full text-center text-xs font-semibold text-muted-foreground z-0">
+                    Tasdiqlash uchun torting
+                  </span>
+                </div>
               </div>
             </CardContent>
           </Card>
