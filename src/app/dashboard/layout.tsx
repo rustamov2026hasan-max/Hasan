@@ -10,45 +10,56 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Desktop Sidebar (Hidden on mobile) */}
-      <aside className="w-64 bg-card border-r border-border flex flex-col hidden md:flex">
-        <div className="h-16 flex items-center px-6 border-b border-border">
-          <Link href="/" className="flex items-center gap-2 text-brand-600 touch-target">
-            <Map className="w-6 h-6" />
-            <span className="font-bold text-lg">CHORVA KUZATUV</span>
+      <aside className="w-[280px] bg-card border-r border-border flex-col hidden md:flex shadow-[4px_0_24px_rgba(0,0,0,0.02)] relative z-10">
+        <div className="h-20 flex items-center px-8 border-b border-border bg-card">
+          <Link href="/" className="flex items-center gap-3 text-brand-600 touch-target">
+            <div className="bg-brand-500/10 p-2 rounded-xl">
+              <Map className="w-7 h-7 text-brand-600 dark:text-brand-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-extrabold text-lg tracking-tight text-foreground leading-tight">CHORVA</span>
+              <span className="text-xs font-semibold text-brand-600 uppercase tracking-widest leading-none">Kuzatuv</span>
+            </div>
           </Link>
         </div>
         
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 mt-4 px-2">Menu</div>
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 rounded-md bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 font-medium touch-target justify-start">
-            <LayoutDashboard className="w-5 h-5" />
+        <nav className="flex-1 p-6 space-y-2.5 overflow-y-auto">
+          <div className="text-[11px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-4 px-3">Asosiy Menyu</div>
+          
+          <Link href="/dashboard" className="flex items-center gap-3 px-4 py-3.5 rounded-xl bg-brand-50 border border-brand-100 dark:bg-brand-900/30 dark:border-brand-800 text-brand-700 dark:text-brand-300 font-semibold shadow-sm transition-all hover:shadow-md touch-target justify-start">
+            <LayoutDashboard className="w-5 h-5 text-brand-600 dark:text-brand-400" />
             Asosiy Panel
           </Link>
-          <Link href="/dashboard/map" className="flex items-center gap-3 px-3 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-colors touch-target justify-start">
-            <Map className="w-5 h-5" />
+          
+          <Link href="/dashboard/map" className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-all touch-target justify-start group">
+            <Map className="w-5 h-5 text-muted-foreground group-hover:text-brand-500 transition-colors" />
             Jonli Xarita
           </Link>
-          <Link href="/dashboard/alerts" className="flex items-center justify-between px-3 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-colors touch-target">
+          
+          <Link href="/dashboard/alerts" className="flex items-center justify-between px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-all touch-target group">
             <div className="flex items-center gap-3">
-              <Bell className="w-5 h-5" />
+              <Bell className="w-5 h-5 text-muted-foreground group-hover:text-amber-500 transition-colors" />
               Ogohlantirishlar
             </div>
             {MOCK_FARM_STATS.activeAlerts > 0 && (
-              <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <span className="bg-red-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-sm">
                 {MOCK_FARM_STATS.activeAlerts}
               </span>
             )}
           </Link>
-          <Link href="/dashboard/settings" className="flex items-center gap-3 px-3 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-colors touch-target justify-start">
-            <Settings className="w-5 h-5" />
+          
+          <div className="text-[11px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-4 mt-8 px-3">Tizim</div>
+          
+          <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-muted hover:text-foreground font-medium transition-all touch-target justify-start group">
+            <Settings className="w-5 h-5 text-muted-foreground group-hover:text-slate-500 transition-colors" />
             Sozlamalar
           </Link>
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <Link href="/" className="flex items-center gap-3 px-3 rounded-md text-muted-foreground hover:bg-red-50 hover:text-red-600 font-medium transition-colors touch-target justify-start">
+        <div className="p-6 border-t border-border bg-muted/20">
+          <Link href="/" className="flex items-center gap-3 px-4 py-3.5 rounded-xl text-muted-foreground hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30 dark:hover:text-red-400 font-medium transition-all touch-target justify-start">
             <LogOut className="w-5 h-5" />
-            Chiqish
+            Tizimdan chiqish
           </Link>
         </div>
       </aside>
