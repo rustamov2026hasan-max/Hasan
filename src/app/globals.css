@@ -2,17 +2,23 @@
 @import "leaflet/dist/leaflet.css";
 
 @theme {
-  --color-brand-50: #f0fdf4;
-  --color-brand-100: #dcfce7;
-  --color-brand-200: #bbf7d0;
-  --color-brand-300: #86efac;
-  --color-brand-400: #4ade80;
-  --color-brand-500: #22c55e;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
-  --color-brand-900: #14532d;
+  /* Forest Green Brand */
+  --color-brand-50: #f2fbf5;
+  --color-brand-100: #e0f6e7;
+  --color-brand-200: #c2eed3;
+  --color-brand-300: #93e0b2;
+  --color-brand-400: #5dcb8a;
+  --color-brand-500: #35b367;
+  --color-brand-600: #259150; /* Forest Green */
+  --color-brand-700: #207342;
+  --color-brand-800: #1d5b36;
+  --color-brand-900: #194b2f;
   
+  /* Clay Accent */
+  --color-clay-50: #faf7f5;
+  --color-clay-500: #a78b71; /* Clay */
+  --color-clay-900: #4a3a2d;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -26,24 +32,26 @@
 }
 
 :root {
-  --background: #f8fafc; /* slate-50 */
-  --foreground: #0f172a; /* slate-900 */
-  --card: #ffffff;
+  /* Glare-resistant Light Mode: Avoid pure whites */
+  --background: #F4F4F4; /* High-value off-white */
+  --foreground: #0f172a; /* Deep Slate text */
+  --card: #e2e8f0; /* Light gray card */
   --card-foreground: #0f172a;
-  --border: #e2e8f0; /* slate-200 */
-  --muted: #f1f5f9; /* slate-100 */
-  --muted-foreground: #64748b; /* slate-500 */
+  --border: #cbd5e1;
+  --muted: #cbd5e1;
+  --muted-foreground: #475569;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020617; /* slate-950 */
-    --foreground: #f8fafc; /* slate-50 */
-    --card: #0f172a; /* slate-900 */
-    --card-foreground: #f8fafc;
-    --border: #1e293b; /* slate-800 */
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8; /* slate-400 */
+    /* Glare-resistant Dark Mode */
+    --background: #0f172a; /* Deep Slate base */
+    --foreground: #F4F4F4; /* Off-white text */
+    --card: #1e293b; /* Slightly lighter deep slate */
+    --card-foreground: #F4F4F4;
+    --border: #334155;
+    --muted: #334155;
+    --muted-foreground: #94a3b8;
   }
 }
 
@@ -54,13 +62,18 @@ body {
   @apply antialiased;
 }
 
-/* Custom Utilities */
+/* Custom Utilities - Ergonomics & AgTech Rules */
 .glass-effect {
-  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-800/50;
+  @apply bg-[#F4F4F4]/80 dark:bg-[#0f172a]/80 backdrop-blur-md border border-slate-300 dark:border-slate-800/50;
 }
 
 .card-hover {
   @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+/* One-handed ergonomic targets */
+.touch-target {
+  @apply min-h-[48px] min-w-[48px] flex items-center justify-center;
 }
 
 /* Leaflet override for dark mode */
